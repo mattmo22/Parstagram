@@ -27,13 +27,18 @@ class LoginViewController: UIViewController {
         let username = usernameField.text!
         let password = passwordField.text!
         
+        let alert = UIAlertController(title: "Could not Login", message: "Username and/or password is incorrect", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+
         
         
         PFUser.logInWithUsername(inBackground: username, password: password) { (user, error) in
             if user != nil {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             } else {
+                self.present(alert, animated: true)
                 print("Error: \(String(describing: error?.localizedDescription))")
+                
             }
         }
         
@@ -44,10 +49,14 @@ class LoginViewController: UIViewController {
         user.username = usernameField.text
         user.password = passwordField.text
         
+        let alert = UIAlertController(title: "Could not Sign Up", message: "Account already exists for this username.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
         user.signUpInBackground { (success, error) in
             if success {
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
             } else {
+                self.present(alert, animated: true)
                 print("Error: \(String(describing: error?.localizedDescription))")
             }
         }
